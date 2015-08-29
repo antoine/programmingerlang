@@ -2,6 +2,8 @@
 %-compile(export_all).
 -export([buildring/1]).
 
+%usage  ex2p150:buildring(3) ! 10.
+
 buildring(N) ->
   io:format("registering ring as: ring~n"),
   register(ring, spawn(fun() -> message(N, ring(N-1)) end)),
