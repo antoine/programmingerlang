@@ -3,6 +3,7 @@
 -export([for/3]).
 -export([perms/1]).
 -export([odds_and_event_acc/1]).
+-export([on_exit/2]).
 
 sum(L) -> sum(L,0).
 
@@ -25,4 +26,14 @@ odds_and_event_acc([H|T], O, E) ->
   end;
 odds_and_event_acc([], O, E) ->
   {lists:reverse(O),lists:reverse(E)}.
+
+on_exit(Pid, Fun) ->
+  spawn(fun() ->
+    process_flag(trap_exit, true),
+    link(Pid),
+    receive
+      {'EXIT', Pid, Why } ->
+        Fun(Why)
+    end
+  end).
 
